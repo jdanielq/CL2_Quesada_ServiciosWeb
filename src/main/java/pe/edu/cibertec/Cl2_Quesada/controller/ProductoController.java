@@ -1,11 +1,13 @@
 package pe.edu.cibertec.Cl2_Quesada.controller;
 
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pe.edu.cibertec.Cl2_Quesada.exception.ResourceNotFoundException;
 import pe.edu.cibertec.Cl2_Quesada.model.Producto;
+import pe.edu.cibertec.Cl2_Quesada.repository.ProductoRepository;
 import pe.edu.cibertec.Cl2_Quesada.service.ProductoService;
 
 import java.util.ArrayList;
@@ -16,7 +18,10 @@ import java.util.List;
 @RequestMapping(path = "api/v1/producto")
 public class ProductoController {
 
+    @Autowired
     private ProductoService productoService;
+    @Autowired
+    private ProductoRepository productoRepository;
 
     @GetMapping("")
     public ResponseEntity<List<Producto>> listarProductos(){
@@ -78,5 +83,20 @@ public class ProductoController {
         } catch (Exception exception) {
             return new ResponseEntity<>("Error al eliminar el producto: " + id, HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+
+    @GetMapping("/nombre/{nombre}")
+    public List<Producto> buscarPorNombre(@PathVariable String nombre) {
+        return productoRepository.findByNombre(nombre);
+    }
+
+    @GetMapping("/cantidad-between")
+    public List<Producto> buscarProductosEntre10y100() {
+        return productoRepository.findProductosBetween10And100();
+    }
+
+    @GetMapping("/vencimiento-2024")
+    public List<Producto> buscarProductosConVencimiento2024() {
+        return productoRepository.findProductosWith2024Expiration();
     }
 }

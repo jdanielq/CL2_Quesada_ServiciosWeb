@@ -12,15 +12,12 @@ import java.util.Optional;
 @Repository
 public interface ProductoRepository extends JpaRepository<Producto, Integer> {
 
-    Optional<Producto> findByNombre(String nombre);
+    List<Producto> findByNombre(String nombre);
 
-    List<Producto> findByNombreContainingIgnoreCase(String filtro);
+    @Query("SELECT p FROM Producto p WHERE p.cantidad > 10 AND p.cantidad < 100")
+    List<Producto> findProductosBetween10And100();
 
-    @Query("SELECT p FROM Producto p WHERE p.nombre LIKE %:filtro%")
-    List<Producto> filtrarProductosPorNombre(@Param("filtro") String filtro);
-
-    @Query(value = "SELECT * FROM Producto WHERE nombre LIKE %:filtro%",
-            nativeQuery = true)
-    List<Producto> filtrarProductosPorNombreSQL(@Param("filtro") String filtro);
+    @Query(nativeQuery = true, value = "SELECT * FROM Producto p WHERE YEAR(p.fecha_vencimiento) = 2024")
+    List<Producto> findProductosWith2024Expiration();
 
 }
