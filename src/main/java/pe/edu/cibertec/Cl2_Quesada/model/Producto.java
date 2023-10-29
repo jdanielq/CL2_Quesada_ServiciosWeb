@@ -24,6 +24,6 @@ public class Producto {
     @Column(name = "cantidad")
     private Integer cantidad;
 
-    @Column(name = "fechaVencimiento")
-    private Date fechaVencimiento;
+    @Column(name = "fechavencimiento")
+    private Date fechavencimiento;
 }
